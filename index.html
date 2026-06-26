@@ -2,113 +2,97 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Modern Bookkeeper Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-gradient { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+    </style>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        dark: '#0f172a',
-                        surface: '#1e293b',
-                        primary: '#6366f1',
-                    }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { dark: '#0f172a' } } } }
     </script>
 </head>
-<body class="bg-dark text-slate-200 min-h-screen p-4 md:p-8 font-sans">
+
+<body class="bg-dark text-slate-200 min-h-screen p-4 md:p-8 selection:bg-indigo-500/30">
 
     <div id="app" class="max-w-4xl mx-auto">
-        <!-- Pin Screen -->
-        <div id="pinScreen" class="fixed inset-0 bg-dark z-50 flex items-center justify-center p-4">
-            <div class="bg-surface p-8 rounded-3xl border border-slate-700 shadow-2xl w-full max-w-sm text-center">
-                <h2 id="pinTitle" class="text-xl mb-6 font-bold text-white">Enter 4-Digit PIN</h2>
-                <input type="password" id="pinInput" maxlength="4" class="bg-slate-900 border border-slate-700 w-full p-4 rounded-xl text-center text-3xl tracking-[1em] mb-6 outline-none focus:border-indigo-500">
-                <button onclick="checkPin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/20 transition">Unlock Ledger</button>
+        <div id="pinScreen" class="fixed inset-0 bg-dark/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="glass p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center transform transition-all">
+                <h2 id="pinTitle" class="text-2xl mb-8 font-bold text-white tracking-tight">Unlock Ledger</h2>
+                <input type="password" id="pinInput" maxlength="4" inputmode="numeric" class="bg-slate-900/50 border border-slate-700 w-full p-6 rounded-2xl text-center text-4xl tracking-[0.5em] mb-8 outline-none focus:border-indigo-500 shadow-inner">
+                <button onclick="checkPin()" class="w-full btn-gradient hover:opacity-90 py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/20 transition-all active:scale-95 text-white">Unlock</button>
             </div>
         </div>
 
-        <!-- Dashboard -->
         <div id="dashboard" class="hidden space-y-8">
-            <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 class="text-3xl font-extrabold text-white">Ledger Pro</h1>
-                    <p class="text-slate-400">Financial Management Dashboard</p>
+                    <h1 class="text-4xl font-extrabold text-white tracking-tighter">Ledger<span class="text-indigo-500">Pro</span></h1>
+                    <p class="text-slate-400">Financial Management Control</p>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="generateMonthlyPDF()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-sm flex items-center gap-2">📄 Export PDF</button>
-                    <button onclick="changePin()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-sm">🔒 Change PIN</button>
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <button onclick="generateMonthlyPDF()" class="flex-1 sm:flex-none px-6 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-95 border border-slate-700">📄 Export</button>
+                    <button onclick="changePin()" class="flex-1 sm:flex-none px-6 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-medium transition-all active:scale-95 border border-slate-700">🔒 Reset</button>
                 </div>
             </header>
 
-            <!-- Stats -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-surface p-6 rounded-3xl border border-slate-800">
-                    <div class="text-slate-400 text-sm">Total Revenue</div>
-                    <div id="totalRevenue" class="text-3xl font-bold text-white">₹0.00</div>
+                <div class="glass p-6 rounded-3xl border border-slate-700/50 shadow-xl">
+                    <div class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Revenue</div>
+                    <div id="totalRevenue" class="text-3xl font-bold text-white">₹0</div>
                 </div>
-                <div class="bg-surface p-6 rounded-3xl border border-slate-800">
-                    <div class="text-slate-400 text-sm">Total Profit</div>
-                    <div id="totalProfit" class="text-3xl font-bold text-emerald-400">₹0.00</div>
+                <div class="glass p-6 rounded-3xl border border-slate-700/50 shadow-xl">
+                    <div class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Profit</div>
+                    <div id="totalProfit" class="text-3xl font-bold text-emerald-400">₹0</div>
                 </div>
-                <div class="bg-surface p-6 rounded-3xl border border-slate-800">
-                    <div class="text-slate-400 text-sm">Pending</div>
+                <div class="glass p-6 rounded-3xl border border-slate-700/50 shadow-xl">
+                    <div class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Pending</div>
                     <div id="pendingCount" class="text-3xl font-bold text-amber-400">0</div>
                 </div>
             </div>
 
-            <!-- Add Order Form -->
-            <div class="bg-surface p-6 rounded-3xl border border-slate-800">
-                <h2 class="text-lg font-bold mb-6 text-white">New Transaction</h2>
-                <form id="orderForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <input type="text" id="itemName" placeholder="Item Name" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500" required>
-                    <input type="text" id="vendorName" placeholder="Vendor" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500" required>
-                    <input type="text" id="custName" placeholder="Customer" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500" required>
-                    <input type="number" id="costPrice" placeholder="Cost (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500" required>
-                    <input type="number" id="sellingPrice" placeholder="Selling (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500" required>
-                    <input type="number" id="vendorDisc" placeholder="Vendor Disc (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500">
-                    <input type="number" id="custDisc" placeholder="Cust Disc (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500">
-                    <select id="paymentMethod" class="bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500">
+            <div class="glass p-8 rounded-3xl border border-slate-700/50">
+                <h2 class="text-xl font-bold mb-6 text-white tracking-tight">New Transaction</h2>
+                <form id="orderForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="itemName" placeholder="Item Name" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full" required>
+                    <input type="text" id="vendorName" placeholder="Vendor" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full" required>
+                    <input type="text" id="custName" placeholder="Customer" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full" required>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="number" id="costPrice" placeholder="Cost (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full" required>
+                        <input type="number" id="sellingPrice" placeholder="Selling (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="number" id="vendorDisc" placeholder="Vendor Disc (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full">
+                        <input type="number" id="custDisc" placeholder="Cust Disc (₹)" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full">
+                    </div>
+                    <select id="paymentMethod" class="bg-slate-900 p-4 rounded-xl border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full">
                         <option value="Cash">Cash</option>
                         <option value="Credit Card">Credit Card</option>
                         <option value="UPI">UPI</option>
                     </select>
-                    <button type="submit" class="col-span-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold transition shadow-lg shadow-indigo-500/20">Add Order</button>
+                    <button type="submit" class="md:col-span-2 btn-gradient hover:opacity-90 py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/20 transition-all active:scale-95 text-white">Record Transaction</button>
                 </form>
             </div>
 
-            <!-- Orders Table -->
-            <div class="bg-surface rounded-3xl border border-slate-800 overflow-hidden">
-                <div class="p-6 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <h2 class="font-bold text-lg">Orders</h2>
-                    <input type="text" id="searchInput" placeholder="Search orders..." class="bg-slate-900 p-3 rounded-xl border border-slate-700 w-full sm:w-64 outline-none focus:border-indigo-500 text-sm">
+            <div class="glass rounded-3xl border border-slate-700/50 overflow-hidden">
+                <div class="p-6 border-b border-slate-700/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <h2 class="font-bold text-lg text-white">Recent Orders</h2>
+                    <input type="text" id="searchInput" placeholder="Search orders..." class="w-full sm:w-64 bg-slate-900/50 p-3 px-4 rounded-xl border border-slate-700 outline-none focus:border-indigo-500 text-sm">
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="text-slate-500 text-xs uppercase bg-slate-900/50">
-                            <tr>
-                                <th class="p-4">Item</th>
-                                <th class="p-4">Customer</th>
-                                <th class="p-4">Profit</th>
-                                <th class="p-4">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ordersBody" class="divide-y divide-slate-800"></tbody>
-                    </table>
+                <div id="ordersBody" class="divide-y divide-slate-700/50">
+                    <!-- Orders will be injected here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Simple Toast -->
-    <div id="toast" class="fixed bottom-4 right-4 bg-emerald-600 text-white px-6 py-3 rounded-2xl shadow-xl hidden animate-bounce"></div>
+    <div id="toast" class="fixed bottom-8 right-8 bg-indigo-600 text-white px-6 py-4 rounded-2xl shadow-2xl hidden transition-all z-50 font-bold transform translate-y-2"></div>
 
     <script>
         const supabaseClient = window.supabase ? window.supabase.createClient(
@@ -120,9 +104,7 @@
 
         window.onload = () => {
             const storedPin = localStorage.getItem('app_pin');
-            if (!storedPin) {
-                document.getElementById('pinTitle').innerText = "Create Your PIN";
-            }
+            if (!storedPin) document.getElementById('pinTitle').innerText = "Create Your PIN";
             document.getElementById('pinScreen').classList.remove('hidden');
             if(supabaseClient) fetchOrders();
         };
@@ -131,7 +113,8 @@
             const t = document.getElementById('toast');
             t.innerText = msg;
             t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 3000);
+            t.style.transform = 'translateY(0)';
+            setTimeout(() => { t.classList.add('hidden'); t.style.transform = 'translateY(8px)'; }, 3000);
         }
 
         function checkPin() {
@@ -156,10 +139,10 @@
 
         async function fetchOrders() {
             if(!supabaseClient) return;
-            const { data, error } = await supabaseClient.from('orders').select('*');
+            const { data, error } = await supabaseClient.from('orders').select('*').order('createdAt', { ascending: false });
             if (error) console.error(error);
             else {
-                orders = data;
+                orders = data || [];
                 renderOrders();
                 calculateTotals();
             }
@@ -190,10 +173,10 @@
             };
 
             const { error } = await supabaseClient.from('orders').insert([newOrder]);
-            if (error) showToast('Error saving order: ' + error.message);
+            if (error) showToast('Error: ' + error.message);
             else {
                 document.getElementById('orderForm').reset();
-                showToast('Transaction recorded!');
+                showToast('Transaction saved successfully!');
                 fetchOrders();
             }
         }
@@ -204,6 +187,16 @@
             if (!error) fetchOrders();
         }
 
+        async function deleteOrder(id) {
+            const { error } = await supabaseClient.from('orders').delete().eq('id', id);
+            if (!error) {
+                showToast('Order deleted successfully!');
+                fetchOrders();
+            } else {
+                showToast('Error: ' + error.message);
+            }
+        }
+
         function renderOrders() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const body = document.getElementById('ordersBody');
@@ -212,17 +205,22 @@
             orders.filter(o => (o.customerName || '').toLowerCase().includes(search) || (o.itemDescription || '').toLowerCase().includes(search))
             .forEach(o => {
                 body.innerHTML += `
-                    <tr>
-                        <td class="p-4 font-medium text-white">${o.itemDescription}</td>
-                        <td class="p-4 text-slate-400">${o.customerName}</td>
-                        <td class="p-4 text-emerald-400 font-bold">₹${(o.profit || 0).toFixed(0)}</td>
-                        <td class="p-4">
-                            <button onclick="toggleStatus('${o.id}', '${o.status}')" 
-                                class="px-3 py-1 rounded-full text-xs font-bold uppercase ${o.status === 'received' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-amber-900/50 text-amber-400'}">
-                                ${o.status}
-                            </button>
-                        </td>
-                    </tr>
+                    <div class="p-5 flex justify-between items-center hover:bg-slate-800/30 transition-all cursor-default">
+                        <div>
+                            <div class="font-bold text-white text-lg">${o.itemDescription}</div>
+                            <div class="text-sm text-slate-400 mt-1">${o.customerName} • ${o.paymentMethod}</div>
+                        </div>
+                        <div class="flex items-center gap-4 text-right">
+                            <div class="text-emerald-400 font-bold">₹${(o.profit || 0).toFixed(0)}</div>
+                            <div class="flex flex-col gap-2">
+                                <button onclick="toggleStatus('${o.id}', '${o.status}')" 
+                                    class="px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full transition-all active:scale-95 ${o.status === 'received' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">
+                                    ${o.status}
+                                </button>
+                                <button onclick="deleteOrder('${o.id}')" class="text-slate-500 hover:text-red-400 text-xs uppercase tracking-wider font-bold transition-all">Delete</button>
+                            </div>
+                        </div>
+                    </div>
                 `;
             });
         }
@@ -242,8 +240,10 @@
         function generateMonthlyPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.text("Monthly Order Recap", 14, 15);
+            doc.setFontSize(18);
+            doc.text("Monthly Order Recap", 14, 20);
             doc.autoTable({
+                startY: 30,
                 head: [['Item', 'Customer', 'Profit', 'Status']],
                 body: orders.map(o => [o.itemDescription, o.customerName, `₹${o.profit}`, o.status])
             });
