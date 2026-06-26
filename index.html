@@ -1,1048 +1,1080 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RR Creations - Bookkeeper</title>
-    <link rel="icon" href="https://placehold.co/64x64/6366f1/ffffff?text=RR" type="image/png">
-    
-    <!-- External Libraries -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RR Creations - Bookkeeper</title>
+    <link rel="icon" href="https://placehold.co/64x64/6366f1/ffffff?text=RR" type="image/png">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0f172a;
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.1) 0, transparent 50%);
-            background-attachment: fixed;
-            color: #e2e8f0;
-            min-height: 100vh;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.1) 0, transparent 50%);
+            background-attachment: fixed;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        .fade-in {
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
 
-        /* Modern Glassmorphism Style */
-        .glass-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 1.25rem;
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+        /* Modern Glassmorphism Style */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-        .btn-gradient {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-gradient::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-gradient::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
 
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
-        }
-        
-        .btn-gradient:hover::after {
-            opacity: 1;
-        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-gradient:hover::after {
+            opacity: 1;
+        }
 
-        /* Premium Input Fields */
-        .form-input {
-            background-color: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-        }
+        /* Premium Input Fields */
+        .form-input {
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+        }
 
-        .form-input:focus {
-            background-color: rgba(15, 23, 42, 0.8);
-            border-color: #8b5cf6;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-        }
+        .form-input:focus {
+            background-color: rgba(15, 23, 42, 0.8);
+            border-color: #8b5cf6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
 
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-        
-        .status-badge.pending {
-            background-color: rgba(245, 158, 11, 0.2);
-            color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-        
-        .status-badge.received {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.pending {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .status-badge.received {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
-        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.5); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.8); }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.5); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.8); }
 
-        /* Modal Styles */
-        .modal-backdrop {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        /* Modal Styles */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-        .modal-backdrop.show {
-            opacity: 1;
-        }
+        .modal-backdrop.show {
+            opacity: 1;
+        }
 
-        .modal-content {
-            background: linear-gradient(to bottom right, #1e293b, #0f172a);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 420px;
-            padding: 2.5rem;
-            transform: scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        .modal-content {
+            background: linear-gradient(to bottom right, #1e293b, #0f172a);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 420px;
+            padding: 2.5rem;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-        .modal-backdrop.show .modal-content {
-            transform: scale(1);
-        }
-        
-        /* Select Dropdown Arrow Customization */
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.2em;
-        }
+        .modal-backdrop.show .modal-content {
+            transform: scale(1);
+        }
+        
+        /* Select Dropdown Arrow Customization */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+        }
 
-        .active-filter {
-            background: rgba(99, 102, 241, 0.2) !important;
-            color: #818cf8 !important;
-            border-left: 3px solid #6366f1;
-        }
-        
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        .active-filter {
+            background: rgba(99, 102, 241, 0.2) !important;
+            color: #818cf8 !important;
+            border-left: 3px solid #6366f1;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
 
-        .toast-success { background: linear-gradient(135deg, #059669, #10b981); border: 1px solid rgba(255,255,255,0.2); }
-        .toast-error { background: linear-gradient(135deg, #dc2626, #ef4444); border: 1px solid rgba(255,255,255,0.2); }
+        .toast-success { background: linear-gradient(135deg, #059669, #10b981); border: 1px solid rgba(255,255,255,0.2); }
+        .toast-error { background: linear-gradient(135deg, #dc2626, #ef4444); border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Lock Screen */
-        #lock-screen {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-        }
-        
-        .pin-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s ease;
-        }
+        /* Lock Screen */
+        #lock-screen {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+        }
+        
+        .pin-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
 
-        .pin-dot-filled {
-            background-color: #8b5cf6;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
-            transform: scale(1.1);
-        }
+        .pin-dot-filled {
+            background-color: #8b5cf6;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+            transform: scale(1.1);
+        }
 
-        .keypad-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .keypad-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
+        .keypad-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .keypad-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
 
-        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-2px, 0, 0); }
-            20%, 80% { transform: translate3d(4px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
-            40%, 60% { transform: translate3d(8px, 0, 0); }
-        }
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+            40%, 60% { transform: translate3d(8px, 0, 0); }
+        }
 
-        /* Print Styles */
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print, #order-form, #install-container, .order-actions { display: none !important; }
-            #app { max-width: 100%; padding: 0; margin: 0; }
-            .print-header { display: block !important; margin-bottom: 2rem; border-bottom: 2px solid #000; padding-bottom: 1rem;}
-            .glass-card { background: transparent !important; box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; margin-bottom: 1rem;}
-            * { color: black !important; }
-            .status-badge { border: 1px solid black; }
-        }
-    </style>
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json,{&quot;name&quot;: &quot;RR Creations&quot;, &quot;short_name&quot;: &quot;RR Creations&quot;, &quot;start_url&quot;: &quot;.&quot;, &quot;display&quot;: &quot;standalone&quot;, &quot;background_color&quot;: &quot;#0f172a&quot;, &quot;theme_color&quot;: &quot;#6366F1&quot;}">
+        /* Print Styles */
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print, #order-form, #install-container, .order-actions { display: none !important; }
+            #app { max-width: 100%; padding: 0; margin: 0; }
+            .print-header { display: block !important; margin-bottom: 2rem; border-bottom: 2px solid #000; padding-bottom: 1rem;}
+            .glass-card { background: transparent !important; box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; margin-bottom: 1rem;}
+            * { color: black !important; }
+            .status-badge { border: 1px solid black; }
+        }
+    </style>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;: &quot;RR Creations&quot;, &quot;short_name&quot;: &quot;RR Creations&quot;, &quot;start_url&quot;: &quot;.&quot;, &quot;display&quot;: &quot;standalone&quot;, &quot;background_color&quot;: &quot;#0f172a&quot;, &quot;theme_color&quot;: &quot;#6366F1&quot;}">
 </head>
 <body class="antialiased">
 
-    <!-- Loading Overlay for DB calls -->
-    <div id="loader" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[9999] flex-col justify-center items-center hidden">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mb-4"></div>
-        <p class="text-indigo-300 font-medium tracking-wider">Syncing Database...</p>
-    </div>
+    <!-- Loading Overlay for DB calls -->
+    <div id="loader" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[9999] flex-col justify-center items-center hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mb-4"></div>
+        <p class="text-indigo-300 font-medium tracking-wider">Syncing Database...</p>
+    </div>
 
-    <!-- Lock Screen -->
-    <div id="lock-screen" class="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300">
-        <div class="glass-card p-10 text-center w-full max-w-sm mx-4">
-            <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                <i data-feather="lock" class="text-white w-8 h-8"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-white mb-2">RR Creations</h2>
-            <p class="text-slate-400 mb-8 text-sm">Enter PIN to access bookkeeper</p>
-            
-            <div id="pin-dots" class="flex justify-center gap-4 mb-10">
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-            </div>
-            
-            <div id="keypad" class="grid grid-cols-3 gap-3">
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">1</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">2</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">3</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">4</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">5</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">6</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">7</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">8</button>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">9</button>
-                <div class="p-4"></div>
-                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">0</button>
-                <button id="keypad-delete" class="keypad-btn p-4 rounded-xl flex justify-center items-center transition text-red-400 hover:text-red-300">
-                    <i data-feather="delete"></i>
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- Lock Screen -->
+    <div id="lock-screen" class="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300">
+        <div class="glass-card p-10 text-center w-full max-w-sm mx-4">
+            <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                <i data-feather="lock" class="text-white w-8 h-8"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">RR Creations</h2>
+            <p class="text-slate-400 mb-8 text-sm">Enter PIN to access bookkeeper</p>
+            
+            <div id="pin-dots" class="flex justify-center gap-4 mb-10">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+            </div>
+            
+            <div id="keypad" class="grid grid-cols-3 gap-3">
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">1</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">2</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">3</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">4</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">5</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">6</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">7</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">8</button>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">9</button>
+                <div class="p-4"></div>
+                <button class="keypad-btn text-2xl font-semibold p-4 rounded-xl transition">0</button>
+                <button id="keypad-delete" class="keypad-btn p-4 rounded-xl flex justify-center items-center transition text-red-400 hover:text-red-300">
+                    <i data-feather="delete"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Main App -->
-    <div id="app" class="max-w-2xl mx-auto p-4 md:p-8" style="display: none;">
-        
-        <!-- Headers -->
-        <header class="text-center mb-10 relative no-print fade-in">
-            <button id="change-pin-btn" class="absolute right-0 top-0 p-2 text-slate-400 hover:text-indigo-400 transition rounded-lg hover:bg-slate-800" title="Change PIN">
-                <i data-feather="key" class="w-5 h-5"></i>
-            </button>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 pb-2">
-                RR Creations
-            </h1>
-            <p class="text-slate-400 font-medium">Modern Reselling Bookkeeper</p>
-        </header>
+    <!-- Main App -->
+    <div id="app" class="max-w-2xl mx-auto p-4 md:p-8" style="display: none;">
+        
+        <!-- Headers -->
+        <header class="text-center mb-10 relative no-print fade-in">
+            <button id="change-pin-btn" class="absolute right-0 top-0 p-2 text-slate-400 hover:text-indigo-400 transition rounded-lg hover:bg-slate-800" title="Change PIN">
+                <i data-feather="key" class="w-5 h-5"></i>
+            </button>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 pb-2">
+                RR Creations
+            </h1>
+            <p class="text-slate-400 font-medium">Modern Reselling Bookkeeper</p>
+        </header>
 
-        <div class="print-header hidden text-center">
-            <h1 id="print-title" class="text-3xl font-bold">RR Creations</h1>
-            <p id="print-date" class="text-gray-500 mt-2"></p>
-        </div>
+        <div class="print-header hidden text-center">
+            <h1 id="print-title" class="text-3xl font-bold">RR Creations</h1>
+            <p id="print-date" class="text-gray-500 mt-2"></p>
+        </div>
 
-        <!-- Dashboard Totals -->
-        <div class="grid grid-cols-2 gap-4 mb-10 fade-in" style="animation-delay: 0.1s;">
-            <div class="glass-card p-5 text-center border-t-4 border-t-yellow-400/50">
-                <h2 class="text-xs font-bold text-yellow-300 uppercase tracking-widest flex items-center justify-center gap-2 mb-2">
-                    <i data-feather="clock" class="w-3 h-3"></i> Pending
-                </h2>
-                <p id="total-pending" class="text-3xl font-extrabold text-white">₹0.00</p>
-            </div>
-            <div class="glass-card p-5 text-center border-t-4 border-t-emerald-400/50">
-                <h2 class="text-xs font-bold text-emerald-300 uppercase tracking-widest flex items-center justify-center gap-2 mb-2">
-                    <i data-feather="check-circle" class="w-3 h-3"></i> Received
-                </h2>
-                <p id="total-received" class="text-3xl font-extrabold text-white">₹0.00</p>
-            </div>
-        </div>
-        
-        <!-- Add Order Form -->
-        <div class="glass-card p-6 md:p-8 mb-10 fade-in relative overflow-hidden" style="animation-delay: 0.2s;">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
-            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                <i data-feather="plus-square" class="text-indigo-400"></i> New Order
-            </h2>
-            
-            <form id="order-form" class="space-y-5">
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Customer Name</label>
-                        <input type="text" id="customer-name" placeholder="e.g., Anjali Sharma" class="form-input block w-full" required>
-                    </div>
-                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Item Description</label>
-                        <input type="text" id="item-description" placeholder="e.g., Blue Silk Kurti" class="form-input block w-full" required>
-                    </div>
-                </div>
+        <!-- Dashboard Totals -->
+        <div class="grid grid-cols-2 gap-4 mb-10 fade-in" style="animation-delay: 0.1s;">
+            <div class="glass-card p-5 text-center border-t-4 border-t-yellow-400/50">
+                <h2 class="text-xs font-bold text-yellow-300 uppercase tracking-widest flex items-center justify-center gap-2 mb-2">
+                    <i data-feather="clock" class="w-3 h-3"></i> Pending
+                </h2>
+                <p id="total-pending" class="text-3xl font-extrabold text-white">₹0.00</p>
+            </div>
+            <div class="glass-card p-5 text-center border-t-4 border-t-emerald-400/50">
+                <h2 class="text-xs font-bold text-emerald-300 uppercase tracking-widest flex items-center justify-center gap-2 mb-2">
+                    <i data-feather="check-circle" class="w-3 h-3"></i> Received
+                </h2>
+                <p id="total-received" class="text-3xl font-extrabold text-white">₹0.00</p>
+            </div>
+        </div>
+        
+        <!-- Add Order Form -->
+        <div class="glass-card p-6 md:p-8 mb-10 fade-in relative overflow-hidden" style="animation-delay: 0.2s;">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                <i data-feather="plus-square" class="text-indigo-400"></i> New Order
+            </h2>
+            
+            <form id="order-form" class="space-y-5">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Customer Name</label>
+                        <input type="text" id="customer-name" placeholder="e.g., Anjali Sharma" class="form-input block w-full" required>
+                    </div>
+                     <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Item Description</label>
+                        <input type="text" id="item-description" placeholder="e.g., Blue Silk Kurti" class="form-input block w-full" required>
+                    </div>
+                </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Vendor Name</label>
-                    <input type="text" id="vendor-name" placeholder="e.g., Dilkush, Shubham, etc." class="form-input block w-full" required>
-                </div>
-                
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-                    <div class="col-span-2">
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Cost Price (₹)</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
-                            <input type="number" id="cost-price" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8" required>
-                        </div>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Quoted Selling Price (₹)</label>
-                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
-                            <input type="number" id="selling-price" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8" required>
-                        </div>
-                    </div>
-                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Vendor Name</label>
+                    <input type="text" id="vendor-name" placeholder="e.g., Dilkush, Shubham, etc." class="form-input block w-full" required>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Cost Price (₹)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
+                            <input type="number" id="cost-price" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8" required>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Quoted Selling Price (₹)</label>
+                         <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
+                            <input type="number" id="selling-price" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8" required>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Supplier Discount (₹)</label>
-                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
-                            <input type="number" id="supplier-discount" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Customer Discount (₹)</label>
-                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
-                            <input type="number" id="customer-discount" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8">
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Payment Method</label>
-                    <select id="payment-method" class="form-input block w-full font-medium" required>
-                        <option value="GPay">GPay / UPI</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Bank Transfer">Bank Transfer</option>
-                    </select>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                     <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Supplier Discount (₹)</label>
+                         <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
+                            <input type="number" id="supplier-discount" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Customer Discount (₹)</label>
+                         <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
+                            <input type="number" id="customer-discount" placeholder="0.00" min="0" step="0.01" class="form-input block w-full pl-8">
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Payment Method</label>
+                    <select id="payment-method" class="form-input block w-full font-medium" required>
+                        <option value="GPay">GPay / UPI</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                    </select>
+                </div>
 
-                <button id="add-order-btn" type="submit" class="w-full btn-gradient text-white font-bold py-3.5 px-4 rounded-xl mt-4 flex justify-center items-center gap-2">
-                    <i data-feather="save" class="w-5 h-5"></i> Save Order
-                </button>
-            </form>
-        </div>
+                <button id="add-order-btn" type="submit" class="w-full btn-gradient text-white font-bold py-3.5 px-4 rounded-xl mt-4 flex justify-center items-center gap-2">
+                    <i data-feather="save" class="w-5 h-5"></i> Save Order
+                </button>
+            </form>
+        </div>
 
-        <!-- Monthly Recap -->
-        <div id="recap-container" class="glass-card p-6 md:p-8 mb-10 fade-in" style="animation-delay: 0.3s;">
-             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <i data-feather="bar-chart-2" class="text-purple-400"></i> Monthly Recap
-                </h2>
-                 <div class="no-print flex items-center bg-slate-800/50 rounded-lg p-1 border border-slate-700">
-                     <button id="share-report" title="Share Report" class="p-2 text-slate-400 hover:text-white transition-colors rounded-md hover:bg-slate-700">
-                        <i data-feather="share-2" class="w-4 h-4"></i>
-                     </button>
-                     <button id="export-pdf" title="Export as PDF" class="p-2 text-slate-400 hover:text-white transition-colors rounded-md hover:bg-slate-700">
-                        <i data-feather="printer" class="w-4 h-4"></i>
-                     </button>
-                 </div>
-            </div>
-            
-            <div class="flex gap-4 mb-6">
-                <div class="flex-1">
-                    <select id="month-select" class="month-select form-input block w-full font-medium"></select>
-                </div>
-                <div class="flex-1">
-                    <select id="year-select" class="year-select form-input block w-full font-medium"></select>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-                <div>
-                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Sales</h3>
-                    <p id="monthly-sales" class="text-lg font-bold text-blue-400">₹0.00</p>
-                </div>
-                <div>
-                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Costs</h3>
-                    <p id="monthly-costs" class="text-lg font-bold text-rose-400">₹0.00</p>
-                </div>
-                <div>
-                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Received</h3>
-                    <p id="monthly-profit" class="text-lg font-bold text-emerald-400">₹0.00</p>
-                </div>
-                 <div>
-                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Pending</h3>
-                    <p id="monthly-pending" class="text-lg font-bold text-amber-400">₹0.00</p>
-                </div>
-            </div>
-        </div>
+        <!-- Monthly Recap -->
+        <div id="recap-container" class="glass-card p-6 md:p-8 mb-10 fade-in" style="animation-delay: 0.3s;">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <i data-feather="bar-chart-2" class="text-purple-400"></i> Monthly Recap
+                </h2>
+                 <div class="no-print flex items-center bg-slate-800/50 rounded-lg p-1 border border-slate-700">
+                     <button id="share-report" title="Share Report" class="p-2 text-slate-400 hover:text-white transition-colors rounded-md hover:bg-slate-700">
+                        <i data-feather="share-2" class="w-4 h-4"></i>
+                     </button>
+                     <button id="export-pdf" title="Export as PDF" class="p-2 text-slate-400 hover:text-white transition-colors rounded-md hover:bg-slate-700">
+                        <i data-feather="printer" class="w-4 h-4"></i>
+                     </button>
+                 </div>
+            </div>
+            
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1">
+                    <select id="month-select" class="month-select form-input block w-full font-medium"></select>
+                </div>
+                <div class="flex-1">
+                    <select id="year-select" class="year-select form-input block w-full font-medium"></select>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center bg-slate-900/40 p-4 rounded-xl border border-slate-800">
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Sales</h3>
+                    <p id="monthly-sales" class="text-lg font-bold text-blue-400">₹0.00</p>
+                </div>
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Costs</h3>
+                    <p id="monthly-costs" class="text-lg font-bold text-rose-400">₹0.00</p>
+                </div>
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Received</h3>
+                    <p id="monthly-profit" class="text-lg font-bold text-emerald-400">₹0.00</p>
+                </div>
+                 <div>
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Pending</h3>
+                    <p id="monthly-pending" class="text-lg font-bold text-amber-400">₹0.00</p>
+                </div>
+            </div>
+        </div>
 
-        <!-- Install Button (PWA) -->
-        <div id="install-container" class="text-center mb-10 hidden">
-            <button id="install-button" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 font-semibold py-2 px-6 rounded-full flex items-center gap-2 mx-auto transition">
-                <i data-feather="download" class="w-4 h-4"></i> Install App
-            </button>
-        </div>
+        <!-- Install Button (PWA) -->
+        <div id="install-container" class="text-center mb-10 hidden">
+            <button id="install-button" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 font-semibold py-2 px-6 rounded-full flex items-center gap-2 mx-auto transition">
+                <i data-feather="download" class="w-4 h-4"></i> Install App
+            </button>
+        </div>
 
-        <!-- Order List -->
-        <div class="fade-in" style="animation-delay: 0.4s;">
-            <div class="flex items-center justify-between mb-6">
-                 <h2 class="text-xl font-bold flex items-center gap-2">
-                     <i data-feather="list" class="text-blue-400"></i> Order History
-                 </h2>
-                 
-                 <!-- Filter Dropdown -->
-                 <div class="relative no-print">
-                    <button id="filter-btn" class="py-2 px-4 text-sm font-medium text-slate-200 bg-slate-800 border border-slate-700 hover:bg-slate-700 transition-colors rounded-xl flex items-center gap-2">
-                        <i data-feather="filter" class="w-4 h-4 text-indigo-400"></i>
-                        <span id="current-filter-label" class="capitalize">All Orders</span>
-                    </button>
-                    
-                    <div id="filter-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-20 overflow-hidden">
-                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option active-filter" data-filter="all">All Orders</a>
-                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option" data-filter="pending">Pending</a>
-                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option" data-filter="received">Received</a>
-                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option border-t border-slate-700" data-filter="archived">Archived</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="order-list" class="space-y-4">
-                <!-- Orders inject here -->
-            </div>
-        </div>
+        <!-- Order List -->
+        <div class="fade-in" style="animation-delay: 0.4s;">
+            <div class="flex items-center justify-between mb-6">
+                 <h2 class="text-xl font-bold flex items-center gap-2">
+                     <i data-feather="list" class="text-blue-400"></i> Order History
+                 </h2>
+                 
+                 <!-- Filter Dropdown -->
+                 <div class="relative no-print">
+                    <button id="filter-btn" class="py-2 px-4 text-sm font-medium text-slate-200 bg-slate-800 border border-slate-700 hover:bg-slate-700 transition-colors rounded-xl flex items-center gap-2">
+                        <i data-feather="filter" class="w-4 h-4 text-indigo-400"></i>
+                        <span id="current-filter-label" class="capitalize">All Orders</span>
+                    </button>
+                    
+                    <div id="filter-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-20 overflow-hidden">
+                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option active-filter" data-filter="all">All Orders</a>
+                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option" data-filter="pending">Pending</a>
+                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option" data-filter="received">Received</a>
+                        <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 filter-option border-t border-slate-700" data-filter="archived">Archived</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="order-list" class="space-y-4">
+                <!-- Orders inject here -->
+            </div>
+        </div>
 
-        <footer class="text-center text-slate-500 text-sm mt-12 pb-8 no-print border-t border-slate-800 pt-6">
-            <p>&copy; <span id="copyright-year"></span> Rangriti Creations, Mumbai. All Rights Reserved.</p>
-        </footer>
-    </div>
+        <footer class="text-center text-slate-500 text-sm mt-12 pb-8 no-print border-t border-slate-800 pt-6">
+            <p>&copy; <span id="copyright-year"></span> Rangriti Creations, Mumbai. All Rights Reserved.</p>
+        </footer>
+    </div>
 
-    <!-- Action Modal -->
-    <div id="action-modal" class="modal-backdrop no-print">
-        <div class="modal-content">
-            <h3 id="modal-title" class="text-xl text-center font-bold mb-3 text-white"></h3>
-            <div id="modal-body"></div>
-            <div id="modal-footer" class="flex justify-center gap-3 mt-8"></div>
-        </div>
-    </div>
+    <!-- Action Modal -->
+    <div id="action-modal" class="modal-backdrop no-print">
+        <div class="modal-content">
+            <h3 id="modal-title" class="text-xl text-center font-bold mb-3 text-white"></h3>
+            <div id="modal-body"></div>
+            <div id="modal-footer" class="flex justify-center gap-3 mt-8"></div>
+        </div>
+    </div>
 
-    <script>
-        const SUPABASE_URL = 'https://kdgfvzdnyloesxtqbvxe.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkZ2Z2emRueWxvZXN4dHFidnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMDc1MzEsImV4cCI6MjA5Nzg4MzUzMX0.idvX60coqFAYttHlR43DUKNtpkr0YgZxcquCZF9F1ao';
-        
-        // --- Database Handler ---
-    const useSupabase = SUPABASE_URL.startsWith('http');
-    let supabaseClient = null;
-    if (useSupabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
+    <script>
+        const SUPABASE_URL = 'https://kdgfvzdnyloesxtqbvxe.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkZ2Z2emRueWxvZXN4dHFidnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMDc1MzEsImV4cCI6MjA5Nzg4MzUzMX0.idvX60coqFAYttHlR43DUKNtpkr0YgZxcquCZF9F1ao';
+        
+        // --- Database Handler ---
+        const useSupabase = SUPABASE_URL.startsWith('http');
+        let supabaseClient = null;
+        if (useSupabase) {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
 
-    const DB = {
-        async loadOrders() {
-            if (useSupabase) {
-                const { data, error } = await supabaseClient.from('orders').select('*').order('createdAt', { ascending: false });
-                if (error) throw new Error(error.message);
-                return data || [];
-            } else {
-                const localData = localStorage.getItem('rr-creations-orders');
-                return localData ? JSON.parse(localData) : [];
-            }
-        },
-        async addOrder(order) {
-            if (useSupabase) {
-                // IMPORTANT: We do not include an ID here. 
-                // The database schema must have a default value for 'id' (e.g., gen_random_uuid())
-                const { data, error } = await supabaseClient.from('orders').insert([order]).select();
-                if (error) throw new Error(error.message);
-                return data[0];
-            } else {
-                const orders = await this.loadOrders();
-                order.id = crypto.randomUUID(); // Only generate ID for local storage
-                orders.unshift(order);
-                localStorage.setItem('rr-creations-orders', JSON.stringify(orders));
-                return order;
-            }
-        },
-        async updateOrder(id, updates) {
-            if (useSupabase) {
-                const { error } = await supabaseClient.from('orders').update(updates).eq('id', id);
-                if (error) throw error;
-            } else {
-                let orders = await this.loadOrders();
-                const index = orders.findIndex(o => o.id === id);
-                if(index > -1) {
-                    orders[index] = { ...orders[index], ...updates };
-                    localStorage.setItem('rr-creations-orders', JSON.stringify(orders));
-                }
-            }
-        },
-        async deleteOrder(id) {
-            if (useSupabase) {
-                const { error } = await supabaseClient.from('orders').delete().eq('id', id);
-                if (error) throw error;
-            } else {
-                let orders = await this.loadOrders();
-                orders = orders.filter(o => o.id !== id);
-                localStorage.setItem('rr-creations-orders', JSON.stringify(orders));
-            }
-        }
-    };
+        const DB = {
+            async loadOrders() {
+                if (useSupabase) {
+                    const { data, error } = await supabaseClient.from('orders').select('*').order('createdAt', { ascending: false });
+                    if (error) {
+                        console.error("Supabase load Error:", error);
+                        throw new Error(error.message || "Failed to load from Supabase");
+                    }
+                    return data || [];
+                } else {
+                    const localData = localStorage.getItem('rr-creations-orders');
+                    return localData ? JSON.parse(localData) : [];
+                }
+            },
+            async addOrder(order) {
+                if (useSupabase) {
+                    const { data, error } = await supabaseClient.from('orders').insert([order]).select();
+                    if (error) {
+                        console.error("Supabase Insert Error:", error);
+                        throw new Error(error.message || "Failed to insert into Supabase");
+                    }
+                    return data[0];
+                } else {
+                    const orders = await this.loadOrders();
+                    orders.unshift(order);
+                    localStorage.setItem('rr-creations-orders', JSON.stringify(orders));
+                    return order;
+                }
+            },
+            async updateOrder(id, updates) {
+                if (useSupabase) {
+                    const { error } = await supabaseClient.from('orders').update(updates).eq('id', id);
+                    if (error) throw error;
+                } else {
+                    let orders = await this.loadOrders();
+                    const index = orders.findIndex(o => o.id === id);
+                    if(index > -1) {
+                        orders[index] = { ...orders[index], ...updates };
+                        localStorage.setItem('rr-creations-orders', JSON.stringify(orders));
+                    }
+                }
+            },
+            async deleteOrder(id) {
+                if (useSupabase) {
+                    const { error } = await supabaseClient.from('orders').delete().eq('id', id);
+                    if (error) throw error;
+                } else {
+                    let orders = await this.loadOrders();
+                    orders = orders.filter(o => o.id !== id);
+                    localStorage.setItem('rr-creations-orders', JSON.stringify(orders));
+                }
+            }
+        };
 
-    // --- Updated addOrder function ---
-    const addOrder = async (e) => {
-        e.preventDefault();
-        
-        const costPrice = parseFloat(costPriceInput.value) || 0;
-        const sellingPrice = parseFloat(sellingPriceInput.value) || 0;
-        const supplierDiscount = parseFloat(supplierDiscountInput.value) || 0;
-        const customerDiscount = parseFloat(customerDiscountInput.value) || 0;
-        
-        const finalCostPrice = costPrice - supplierDiscount;
-        const finalSellingPrice = sellingPrice - customerDiscount;
+        // --- App State & Elements ---
+        const { jsPDF } = window.jspdf;
+        let allOrders = []; 
+        let itemToModifyId = null;
+        let currentModifyAction = null;
+        let currentFilter = 'all'; 
 
-        if (finalSellingPrice < finalCostPrice) { 
-            showMessageModal('Invalid Pricing', 'Final selling price cannot be less than the final cost.'); 
-            return; 
-        }
+        const orderForm = document.getElementById('order-form');
+        const customerNameInput = document.getElementById('customer-name');
+        const itemDescriptionInput = document.getElementById('item-description');
+        const vendorNameInput = document.getElementById('vendor-name');
+        const costPriceInput = document.getElementById('cost-price');
+        const sellingPriceInput = document.getElementById('selling-price');
+        const supplierDiscountInput = document.getElementById('supplier-discount');
+        const customerDiscountInput = document.getElementById('customer-discount');
+        const paymentMethodInput = document.getElementById('payment-method');
+        
+        const orderList = document.getElementById('order-list');
+        const totalPendingEl = document.getElementById('total-pending');
+        const totalReceivedEl = document.getElementById('total-received');
+        const loader = document.getElementById('loader');
 
-        const newOrder = {
-            customerName: customerNameInput.value.trim(), 
-            itemDescription: itemDescriptionInput.value.trim(), 
-            vendorName: vendorNameInput.value.trim(), 
-            costPrice, 
-            sellingPrice, 
-            discount: supplierDiscount,
-            finalCostPrice, 
-            profit: finalSellingPrice - finalCostPrice, 
-            paymentMethod: paymentMethodInput.value, 
-            status: 'pending', 
-            createdAt: new Date().toISOString(), 
-            isArchived: false,
-        };
+        // --- Utility Functions ---
+        const formatCurrency = (num) => {
+            return (num || 0).toLocaleString('en-IN', {
+                style: 'currency', currency: 'INR', minimumFractionDigits: 2
+            });
+        };
+        
+        const showLoader = () => loader.style.display = 'flex';
+        const hideLoader = () => loader.style.display = 'none';
 
-        try {
-            showLoader();
-            await DB.addOrder(newOrder);
-            orderForm.reset();
-            showToast('Order added successfully!');
-            await refreshData();
-        } catch (error) {
-            console.error(error);
-            showToast(`Error: ${error.message}`, "error");
-        } finally {
-            hideLoader();
-        }
-    };
-        const addOrder = async (e) => {
-            e.preventDefault();
-            
-            const customerName = customerNameInput.value.trim();
-            const vendorName = vendorNameInput.value.trim();
-            const itemDescription = itemDescriptionInput.value.trim();
-            
-            const costPrice = parseFloat(costPriceInput.value) || 0;
-            const sellingPrice = parseFloat(sellingPriceInput.value) || 0;
-            const supplierDiscount = parseFloat(supplierDiscountInput.value) || 0;
-            const customerDiscount = parseFloat(customerDiscountInput.value) || 0;
-            
-            const finalCostPrice = costPrice - supplierDiscount;
-            const finalSellingPrice = sellingPrice - customerDiscount;
-            const paymentMethod = paymentMethodInput.value;
+        const showToast = (message, type = 'success') => {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
 
-            if (finalSellingPrice < finalCostPrice) { 
-                showMessageModal('Invalid Pricing', 'Final selling price cannot be less than the final cost.'); 
-                return; 
-            }
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'success' ? 'toast-success' : 'toast-error'}`;
+            toast.innerHTML = `
+                <i data-feather="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-5 h-5"></i>
+                <span class="font-medium">${message}</span>
+            `;
+            document.body.appendChild(toast);
+            if(window.feather) feather.replace();
 
-            const profit = finalSellingPrice - finalCostPrice;
-            
-            const newOrder = {
-                id: useSupabase ? undefined : crypto.randomUUID(), 
-                customerName, 
-                itemDescription, 
-                vendorName, 
-                costPrice, 
-                sellingPrice, 
-                discount: supplierDiscount, // We store supplier discount in the 'discount' DB column
-                finalCostPrice, 
-                profit, 
-                paymentMethod, 
-                status: 'pending', 
-                createdAt: new Date().toISOString(), 
-                isArchived: false,
-                // If you want to store customer discount, you'd need a new column in DB.
-                // For now, it calculates the profit correctly without a dedicated column.
-            };
+            // Trigger reflow
+            void toast.offsetWidth;
+            toast.classList.add('show');
 
-            // If local, enforce ID
-            if(!useSupabase) newOrder.id = crypto.randomUUID();
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        };
 
-            try {
-                showLoader();
-                await DB.addOrder(newOrder);
-                orderForm.reset();
-                showToast('Order added successfully!');
-                await refreshData();
-            } catch (error) {
-                console.error(error);
-                showToast(`Failed to save: ${error.message || 'Unknown error'}`, "error");
-            } finally {
-                hideLoader();
-            }
-        };
-        
-        const changeOrderStatus = async (id, newStatus) => {
-            try {
-                showLoader();
-                await DB.updateOrder(id, { status: newStatus });
-                showToast(`Order marked as ${newStatus}.`);
-                await refreshData();
-            } catch (error) {
-                showToast("Update failed.", "error");
-            } finally {
-                hideLoader();
-            }
-        };
+        // --- Core Application Logic ---
+        const refreshData = async () => {
+            try {
+                showLoader();
+                allOrders = await DB.loadOrders();
+                // Normalize dates for sorting locally if needed
+                allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                renderOrders();
+                updateTotals();
+                calculateMonthlyRecap();
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                showToast(`Failed to sync database: ${error.message}`, "error");
+            } finally {
+                hideLoader();
+            }
+        };
 
-        const archiveOrder = async (id, isArchived) => {
-            try {
-                showLoader();
-                await DB.updateOrder(id, { isArchived });
-                showToast(isArchived ? 'Moved to archive.' : 'Restored from archive.');
-                await refreshData();
-            } catch(e) {
-                showToast("Action failed.", "error");
-            } finally { hideLoader(); }
-        };
+        const addOrder = async (e) => {
+            e.preventDefault();
+            
+            const customerName = customerNameInput.value.trim();
+            const vendorName = vendorNameInput.value.trim();
+            const itemDescription = itemDescriptionInput.value.trim();
+            
+            const costPrice = parseFloat(costPriceInput.value) || 0;
+            const sellingPrice = parseFloat(sellingPriceInput.value) || 0;
+            const supplierDiscount = parseFloat(supplierDiscountInput.value) || 0;
+            const customerDiscount = parseFloat(customerDiscountInput.value) || 0;
+            
+            const finalCostPrice = costPrice - supplierDiscount;
+            const finalSellingPrice = sellingPrice - customerDiscount;
+            const paymentMethod = paymentMethodInput.value;
 
-        const deleteOrder = async (id) => {
-            try {
-                showLoader();
-                await DB.deleteOrder(id);
-                showToast('Order deleted permanently.');
-                await refreshData();
-            } catch(e) {
-                showToast("Delete failed.", "error");
-            } finally { hideLoader(); }
-        };
+            if (finalSellingPrice < finalCostPrice) { 
+                showMessageModal('Invalid Pricing', 'Final selling price cannot be less than the final cost.'); 
+                return; 
+            }
 
-        // --- UI Rendering ---
-        const renderOrders = () => {
-            orderList.innerHTML = '';
-            
-            const filteredOrders = allOrders.filter(order => {
-                if (currentFilter === 'archived') return order.isArchived;
-                if (order.isArchived) return false;
-                if (currentFilter === 'all') return true;
-                return order.status === currentFilter;
-            });
-            
-            if (filteredOrders.length === 0) {
-                orderList.innerHTML = `
-                    <div class="glass-card text-center text-slate-400 p-12 border-dashed border-2 border-slate-700">
-                        <div class="mx-auto w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                            <i data-feather="inbox" class="w-8 h-8 text-slate-500"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-1">No orders found</h3>
-                        <p class="text-sm">Try tweaking your filters or adding a new order.</p>
-                    </div>`;
-            }
-            
-            filteredOrders.forEach(order => {
-                const isPending = order.status === 'pending';
-                const statusClass = isPending ? 'pending' : 'received';
-                
-                // Backwards compatibility calculation for orders without finalSellingPrice explicitly stored
-                const finalSellPrice = order.finalCostPrice + order.profit; 
-                // Calculate customer discount visually (original selling price minus what they actually paid)
-                const inferredCustomerDiscount = order.sellingPrice - finalSellPrice;
-                
-                const card = document.createElement('div');
-                card.className = `glass-card p-5 flex flex-col md:flex-row gap-4 fade-in group hover:border-slate-500/50`;
-                
-                card.innerHTML = `
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="font-bold text-lg text-white">${order.customerName}</h3>
-                            <span class="status-badge ${statusClass}">${order.status}</span>
-                        </div>
-                        <p class="text-sm text-slate-300 font-medium mb-1">${order.itemDescription}</p>
-                        <p class="text-xs text-slate-400 mb-4 flex items-center gap-1">
-                            <i data-feather="truck" class="w-3 h-3"></i> Vendor: <span class="text-slate-200">${order.vendorName}</span>
-                        </p>
-                        
-                        <div class="bg-slate-900/50 rounded-lg p-3 grid grid-cols-2 sm:flex sm:flex-wrap gap-x-6 gap-y-3 text-xs border border-slate-800">
-                            <div>
-                                <span class="text-slate-500 block">Final Selling</span>
-                                <span class="font-bold text-white">${formatCurrency(finalSellPrice)}</span>
-                                ${inferredCustomerDiscount > 0 ? `<span class="block text-[10px] text-amber-400">(-${formatCurrency(inferredCustomerDiscount)} Cust Dis)</span>` : ''}
-                            </div>
-                            <div>
-                                <span class="text-slate-500 block">Cost</span>
-                                <span class="font-medium text-slate-300">${formatCurrency(order.costPrice)}</span>
-                                ${order.discount > 0 ? `<span class="block text-[10px] text-emerald-400">(-${formatCurrency(order.discount)} Supp Dis)</span>` : ''}
-                            </div>
-                            
-                            <div class="col-span-2 sm:col-span-1">
-                                <span class="text-slate-500 block">Profit</span>
-                                <span class="font-bold text-emerald-400 text-sm">${formatCurrency(order.profit)}</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex md:flex-col justify-end gap-2 shrink-0 border-t border-slate-700 md:border-t-0 md:border-l md:pl-4 pt-4 md:pt-0 mt-2 md:mt-0 order-actions">
-                        ${order.isArchived ? 
-                            `<button onclick="archiveOrder('${order.id}', false)" class="flex-1 md:flex-none bg-indigo-500/20 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-500/30 py-2 px-3 rounded-lg text-sm font-semibold transition">Unarchive</button>` : 
-                            (isPending ? 
-                            `<button onclick="changeOrderStatus('${order.id}', 'received')" class="flex-1 md:flex-none bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/30 py-2 px-3 rounded-lg text-sm font-semibold transition">Mark Received</button>` : 
-                            `<button onclick="changeOrderStatus('${order.id}', 'pending')" class="flex-1 md:flex-none bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-white border border-amber-500/30 py-2 px-3 rounded-lg text-sm font-semibold transition">Mark Pending</button>`)
-                        }
-                        
-                        <div class="flex gap-2">
-                            ${!order.isArchived ? `<button onclick="showConfirmationModal('${order.id}', 'archive')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-300 p-2 rounded-lg transition flex justify-center"><i data-feather="archive" class="w-4 h-4"></i></button>` : ''}
-                            <button onclick="showConfirmationModal('${order.id}', 'delete')" class="flex-1 bg-rose-500/20 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/30 p-2 rounded-lg transition flex justify-center"><i data-feather="trash-2" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>
-                `;
-                orderList.appendChild(card);
-            });
-            if(window.feather) feather.replace();
-        };
+            const profit = finalSellingPrice - finalCostPrice;
+            
+            const newOrder = {
+                id: useSupabase ? undefined : crypto.randomUUID(), 
+                customerName, 
+                itemDescription, 
+                vendorName, 
+                costPrice, 
+                sellingPrice, 
+                discount: supplierDiscount, // We store supplier discount in the 'discount' DB column
+                finalCostPrice, 
+                profit, 
+                paymentMethod, 
+                status: 'pending', 
+                createdAt: new Date().toISOString(), 
+                isArchived: false,
+                // If you want to store customer discount, you'd need a new column in DB.
+                // For now, it calculates the profit correctly without a dedicated column.
+            };
 
-        const updateTotals = () => {
-            const active = allOrders.filter(o => !o.isArchived);
-            const pending = active.filter(o => o.status === 'pending').reduce((s, o) => s + o.profit, 0);
-            const received = active.filter(o => o.status === 'received').reduce((s, o) => s + o.profit, 0);
+            // If local, enforce ID
+            if(!useSupabase) newOrder.id = crypto.randomUUID();
 
-            totalPendingEl.textContent = formatCurrency(pending);
-            totalReceivedEl.textContent = formatCurrency(received);
-        };
+            try {
+                showLoader();
+                await DB.addOrder(newOrder);
+                orderForm.reset();
+                showToast('Order added successfully!');
+                await refreshData();
+            } catch (error) {
+                console.error(error);
+                showToast(`Failed to save: ${error.message || 'Unknown error'}`, "error");
+            } finally {
+                hideLoader();
+            }
+        };
+        
+        const changeOrderStatus = async (id, newStatus) => {
+            try {
+                showLoader();
+                await DB.updateOrder(id, { status: newStatus });
+                showToast(`Order marked as ${newStatus}.`);
+                await refreshData();
+            } catch (error) {
+                showToast("Update failed.", "error");
+            } finally {
+                hideLoader();
+            }
+        };
 
-        // --- Monthly Recap & PDF Logic ---
-        const monthSelect = document.getElementById('month-select');
-        const yearSelect = document.getElementById('year-select');
-        
-        function setupDateSelectors(currentMonth, currentYear) {
-            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            
-            monthSelect.innerHTML = ''; yearSelect.innerHTML = '';
-            
-            months.forEach((m, i) => {
-                monthSelect.innerHTML += `<option value="${i}" ${i === currentMonth ? 'selected' : ''}>${m}</option>`;
-            });
-            
-            const uniqueYears = [...new Set(allOrders.map(o => new Date(o.createdAt).getFullYear()))];
-            if (!uniqueYears.includes(currentYear)) uniqueYears.push(currentYear);
-            uniqueYears.sort((a,b) => b - a).forEach(y => {
-                yearSelect.innerHTML += `<option value="${y}" ${y === currentYear ? 'selected' : ''}>${y}</option>`;
-            });
-        }
+        const archiveOrder = async (id, isArchived) => {
+            try {
+                showLoader();
+                await DB.updateOrder(id, { isArchived });
+                showToast(isArchived ? 'Moved to archive.' : 'Restored from archive.');
+                await refreshData();
+            } catch(e) {
+                showToast("Action failed.", "error");
+            } finally { hideLoader(); }
+        };
 
-        const calculateMonthlyRecap = () => {
-            if (!monthSelect.value || !yearSelect.value) return;
-            const m = parseInt(monthSelect.value);
-            const y = parseInt(yearSelect.value);
+        const deleteOrder = async (id) => {
+            try {
+                showLoader();
+                await DB.deleteOrder(id);
+                showToast('Order deleted permanently.');
+                await refreshData();
+            } catch(e) {
+                showToast("Delete failed.", "error");
+            } finally { hideLoader(); }
+        };
 
-            const filtered = allOrders.filter(o => {
-                if (o.isArchived) return false;
-                const d = new Date(o.createdAt);
-                return d.getMonth() === m && d.getFullYear() === y;
-            });
-            
-            // Calculate Sales based on final selling price (Cost + Profit)
-            const sales = filtered.reduce((sum, o) => sum + (o.finalCostPrice + o.profit), 0);
-            const costs = filtered.reduce((sum, o) => sum + o.finalCostPrice, 0);
-            const rec = filtered.filter(o => o.status === 'received').reduce((sum, o) => sum + o.profit, 0);
-            const pen = filtered.filter(o => o.status === 'pending').reduce((sum, o) => sum + o.profit, 0);
+        // --- UI Rendering ---
+        const renderOrders = () => {
+            orderList.innerHTML = '';
+            
+            const filteredOrders = allOrders.filter(order => {
+                if (currentFilter === 'archived') return order.isArchived;
+                if (order.isArchived) return false;
+                if (currentFilter === 'all') return true;
+                return order.status === currentFilter;
+            });
+            
+            if (filteredOrders.length === 0) {
+                orderList.innerHTML = `
+                    <div class="glass-card text-center text-slate-400 p-12 border-dashed border-2 border-slate-700">
+                        <div class="mx-auto w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                            <i data-feather="inbox" class="w-8 h-8 text-slate-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-1">No orders found</h3>
+                        <p class="text-sm">Try tweaking your filters or adding a new order.</p>
+                    </div>`;
+            }
+            
+            filteredOrders.forEach(order => {
+                const isPending = order.status === 'pending';
+                const statusClass = isPending ? 'pending' : 'received';
+                
+                // Backwards compatibility calculation for orders without finalSellingPrice explicitly stored
+                const finalSellPrice = order.finalCostPrice + order.profit; 
+                // Calculate customer discount visually (original selling price minus what they actually paid)
+                const inferredCustomerDiscount = order.sellingPrice - finalSellPrice;
+                
+                const card = document.createElement('div');
+                card.className = `glass-card p-5 flex flex-col md:flex-row gap-4 fade-in group hover:border-slate-500/50`;
+                
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg text-white">${order.customerName}</h3>
+                            <span class="status-badge ${statusClass}">${order.status}</span>
+                        </div>
+                        <p class="text-sm text-slate-300 font-medium mb-1">${order.itemDescription}</p>
+                        <p class="text-xs text-slate-400 mb-4 flex items-center gap-1">
+                            <i data-feather="truck" class="w-3 h-3"></i> Vendor: <span class="text-slate-200">${order.vendorName}</span>
+                        </p>
+                        
+                        <div class="bg-slate-900/50 rounded-lg p-3 grid grid-cols-2 sm:flex sm:flex-wrap gap-x-6 gap-y-3 text-xs border border-slate-800">
+                            <div>
+                                <span class="text-slate-500 block">Final Selling</span>
+                                <span class="font-bold text-white">${formatCurrency(finalSellPrice)}</span>
+                                ${inferredCustomerDiscount > 0 ? `<span class="block text-[10px] text-amber-400">(-${formatCurrency(inferredCustomerDiscount)} Cust Dis)</span>` : ''}
+                            </div>
+                            <div>
+                                <span class="text-slate-500 block">Cost</span>
+                                <span class="font-medium text-slate-300">${formatCurrency(order.costPrice)}</span>
+                                ${order.discount > 0 ? `<span class="block text-[10px] text-emerald-400">(-${formatCurrency(order.discount)} Supp Dis)</span>` : ''}
+                            </div>
+                            
+                            <div class="col-span-2 sm:col-span-1">
+                                <span class="text-slate-500 block">Profit</span>
+                                <span class="font-bold text-emerald-400 text-sm">${formatCurrency(order.profit)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex md:flex-col justify-end gap-2 shrink-0 border-t border-slate-700 md:border-t-0 md:border-l md:pl-4 pt-4 md:pt-0 mt-2 md:mt-0 order-actions">
+                        ${order.isArchived ? 
+                            `<button onclick="archiveOrder('${order.id}', false)" class="flex-1 md:flex-none bg-indigo-500/20 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-500/30 py-2 px-3 rounded-lg text-sm font-semibold transition">Unarchive</button>` : 
+                            (isPending ? 
+                            `<button onclick="changeOrderStatus('${order.id}', 'received')" class="flex-1 md:flex-none bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/30 py-2 px-3 rounded-lg text-sm font-semibold transition">Mark Received</button>` : 
+                            `<button onclick="changeOrderStatus('${order.id}', 'pending')" class="flex-1 md:flex-none bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-white border border-amber-500/30 py-2 px-3 rounded-lg text-sm font-semibold transition">Mark Pending</button>`)
+                        }
+                        
+                        <div class="flex gap-2">
+                            ${!order.isArchived ? `<button onclick="showConfirmationModal('${order.id}', 'archive')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-300 p-2 rounded-lg transition flex justify-center"><i data-feather="archive" class="w-4 h-4"></i></button>` : ''}
+                            <button onclick="showConfirmationModal('${order.id}', 'delete')" class="flex-1 bg-rose-500/20 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/30 p-2 rounded-lg transition flex justify-center"><i data-feather="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                `;
+                orderList.appendChild(card);
+            });
+            if(window.feather) feather.replace();
+        };
 
-            document.getElementById('monthly-sales').textContent = formatCurrency(sales);
-            document.getElementById('monthly-costs').textContent = formatCurrency(costs);
-            document.getElementById('monthly-profit').textContent = formatCurrency(rec);
-            document.getElementById('monthly-pending').textContent = formatCurrency(pen);
-        };
+        const updateTotals = () => {
+            const active = allOrders.filter(o => !o.isArchived);
+            const pending = active.filter(o => o.status === 'pending').reduce((s, o) => s + o.profit, 0);
+            const received = active.filter(o => o.status === 'received').reduce((s, o) => s + o.profit, 0);
 
-        // --- Modals ---
-        const actionModal = document.getElementById('action-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalBody = document.getElementById('modal-body');
-        const modalFooter = document.getElementById('modal-footer');
+            totalPendingEl.textContent = formatCurrency(pending);
+            totalReceivedEl.textContent = formatCurrency(received);
+        };
 
-        const hideActionModal = () => { actionModal.classList.remove('show'); setTimeout(() => { actionModal.style.display = 'none'; }, 300); };
-        
-        const showConfirmationModal = (id, action) => {
-            itemToModifyId = id; currentModifyAction = action;
-            
-            const isDel = action === 'delete';
-            modalTitle.textContent = isDel ? 'Delete Order?' : 'Archive Order?';
-            modalBody.innerHTML = `<p class="text-slate-300 text-center text-sm">Are you sure you want to ${isDel ? 'permanently delete' : 'archive'} this order? This action cannot be undone easily.</p>`;
-            
-            modalFooter.innerHTML = `
-                <button onclick="hideActionModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl border border-slate-700 transition">Cancel</button>
-                <button onclick="handleConfirm()" class="flex-1 ${isDel ? 'bg-rose-600 hover:bg-rose-700' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-semibold py-2.5 rounded-xl transition">${isDel ? 'Delete' : 'Archive'}</button>
-            `;
-            
-            actionModal.style.display = 'flex';
-            setTimeout(() => actionModal.classList.add('show'), 10);
-        };
+        // --- Monthly Recap & PDF Logic ---
+        const monthSelect = document.getElementById('month-select');
+        const yearSelect = document.getElementById('year-select');
+        
+        function setupDateSelectors(currentMonth, currentYear) {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            monthSelect.innerHTML = ''; yearSelect.innerHTML = '';
+            
+            months.forEach((m, i) => {
+                monthSelect.innerHTML += `<option value="${i}" ${i === currentMonth ? 'selected' : ''}>${m}</option>`;
+            });
+            
+            const uniqueYears = [...new Set(allOrders.map(o => new Date(o.createdAt).getFullYear()))];
+            if (!uniqueYears.includes(currentYear)) uniqueYears.push(currentYear);
+            uniqueYears.sort((a,b) => b - a).forEach(y => {
+                yearSelect.innerHTML += `<option value="${y}" ${y === currentYear ? 'selected' : ''}>${y}</option>`;
+            });
+        }
 
-        // Needs to be on window object for inline onclick in renderOrders
-        window.showConfirmationModal = showConfirmationModal;
-        window.archiveOrder = archiveOrder;
-        window.changeOrderStatus = changeOrderStatus;
+        const calculateMonthlyRecap = () => {
+            if (!monthSelect.value || !yearSelect.value) return;
+            const m = parseInt(monthSelect.value);
+            const y = parseInt(yearSelect.value);
 
-        const handleConfirm = () => {
-            if (currentModifyAction === 'archive') archiveOrder(itemToModifyId, true);
-            if (currentModifyAction === 'delete') deleteOrder(itemToModifyId);
-            hideActionModal();
-        };
+            const filtered = allOrders.filter(o => {
+                if (o.isArchived) return false;
+                const d = new Date(o.createdAt);
+                return d.getMonth() === m && d.getFullYear() === y;
+            });
+            
+            // Calculate Sales based on final selling price (Cost + Profit)
+            const sales = filtered.reduce((sum, o) => sum + (o.finalCostPrice + o.profit), 0);
+            const costs = filtered.reduce((sum, o) => sum + o.finalCostPrice, 0);
+            const rec = filtered.filter(o => o.status === 'received').reduce((sum, o) => sum + o.profit, 0);
+            const pen = filtered.filter(o => o.status === 'pending').reduce((sum, o) => sum + o.profit, 0);
 
-        window.handleConfirm = handleConfirm;
-        window.hideActionModal = hideActionModal;
+            document.getElementById('monthly-sales').textContent = formatCurrency(sales);
+            document.getElementById('monthly-costs').textContent = formatCurrency(costs);
+            document.getElementById('monthly-profit').textContent = formatCurrency(rec);
+            document.getElementById('monthly-pending').textContent = formatCurrency(pen);
+        };
 
-        const showChangePinModal = () => {
-            modalTitle.textContent = 'Change App PIN';
-            modalBody.innerHTML = `
-                <div class="space-y-4 text-left mt-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Current PIN</label>
-                        <input type="password" id="current-pin" inputmode="numeric" maxlength="4" placeholder="••••" class="form-input block w-full text-center tracking-widest text-2xl py-3" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">New PIN (4 Digits)</label>
-                        <input type="password" id="new-pin" inputmode="numeric" maxlength="4" placeholder="••••" class="form-input block w-full text-center tracking-widest text-2xl py-3" required>
-                    </div>
-                </div>
-            `;
-            modalFooter.innerHTML = `
-                <button onclick="hideActionModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl border border-slate-700 transition">Cancel</button>
-                <button onclick="saveNewPin()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition">Save PIN</button>
-            `;
-            actionModal.style.display = 'flex';
-            setTimeout(() => actionModal.classList.add('show'), 10);
-        };
+        // --- Modals ---
+        const actionModal = document.getElementById('action-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalFooter = document.getElementById('modal-footer');
 
-        window.saveNewPin = () => {
-            const currentPinInput = document.getElementById('current-pin').value;
-            const newPinInput = document.getElementById('new-pin').value;
-            const savedPin = localStorage.getItem('rr_app_pin') || '0000';
+        const hideActionModal = () => { actionModal.classList.remove('show'); setTimeout(() => { actionModal.style.display = 'none'; }, 300); };
+        
+        const showConfirmationModal = (id, action) => {
+            itemToModifyId = id; currentModifyAction = action;
+            
+            const isDel = action === 'delete';
+            modalTitle.textContent = isDel ? 'Delete Order?' : 'Archive Order?';
+            modalBody.innerHTML = `<p class="text-slate-300 text-center text-sm">Are you sure you want to ${isDel ? 'permanently delete' : 'archive'} this order? This action cannot be undone easily.</p>`;
+            
+            modalFooter.innerHTML = `
+                <button onclick="hideActionModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl border border-slate-700 transition">Cancel</button>
+                <button onclick="handleConfirm()" class="flex-1 ${isDel ? 'bg-rose-600 hover:bg-rose-700' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-semibold py-2.5 rounded-xl transition">${isDel ? 'Delete' : 'Archive'}</button>
+            `;
+            
+            actionModal.style.display = 'flex';
+            setTimeout(() => actionModal.classList.add('show'), 10);
+        };
 
-            if(currentPinInput !== savedPin) {
-                showToast('Current PIN is incorrect.', 'error');
-                return;
-            }
-            if(!/^\d{4}$/.test(newPinInput)) {
-                showToast('New PIN must be exactly 4 digits.', 'error');
-                return;
-            }
+        // Needs to be on window object for inline onclick in renderOrders
+        window.showConfirmationModal = showConfirmationModal;
+        window.archiveOrder = archiveOrder;
+        window.changeOrderStatus = changeOrderStatus;
 
-            localStorage.setItem('rr_app_pin', newPinInput);
-            showToast('PIN successfully changed!');
-            hideActionModal();
-        };
-        window.showChangePinModal = showChangePinModal;
+        const handleConfirm = () => {
+            if (currentModifyAction === 'archive') archiveOrder(itemToModifyId, true);
+            if (currentModifyAction === 'delete') deleteOrder(itemToModifyId);
+            hideActionModal();
+        };
 
-        const showMessageModal = (title, text) => {
-            modalTitle.textContent = title;
-            modalBody.innerHTML = `<p class="text-slate-300 text-center text-sm">${text}</p>`;
-            modalFooter.innerHTML = `<button onclick="hideActionModal()" class="w-full btn-gradient text-white font-semibold py-2.5 rounded-xl">Got it</button>`;
-            actionModal.style.display = 'flex';
-            setTimeout(() => actionModal.classList.add('show'), 10);
-        };
+        window.handleConfirm = handleConfirm;
+        window.hideActionModal = hideActionModal;
 
-        // --- PDF Generation ---
-        document.getElementById('export-pdf').addEventListener('click', () => window.print());
-        document.getElementById('share-report').addEventListener('click', async () => {
-            const m = parseInt(monthSelect.value);
-            const y = parseInt(yearSelect.value);
-            const monthName = monthSelect.options[monthSelect.selectedIndex].text;
-            
-            const filtered = allOrders.filter(o => !o.isArchived && new Date(o.createdAt).getMonth() === m && new Date(o.createdAt).getFullYear() === y);
-            
-            if (filtered.length === 0) { showMessageModal('No Data', `No orders found for ${monthName} ${y}.`); return; }
+        const showChangePinModal = () => {
+            modalTitle.textContent = 'Change App PIN';
+            modalBody.innerHTML = `
+                <div class="space-y-4 text-left mt-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Current PIN</label>
+                        <input type="password" id="current-pin" inputmode="numeric" maxlength="4" placeholder="••••" class="form-input block w-full text-center tracking-widest text-2xl py-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">New PIN (4 Digits)</label>
+                        <input type="password" id="new-pin" inputmode="numeric" maxlength="4" placeholder="••••" class="form-input block w-full text-center tracking-widest text-2xl py-3" required>
+                    </div>
+                </div>
+            `;
+            modalFooter.innerHTML = `
+                <button onclick="hideActionModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl border border-slate-700 transition">Cancel</button>
+                <button onclick="saveNewPin()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition">Save PIN</button>
+            `;
+            actionModal.style.display = 'flex';
+            setTimeout(() => actionModal.classList.add('show'), 10);
+        };
 
-            const doc = new jsPDF();
-            doc.setFontSize(18); doc.text(`RR Creations - ${monthName} ${y}`, 14, 20);
-            
-            const head = [['Date', 'Customer', 'Item', 'Vendor', 'Final Sale', 'Final Cost', 'Profit', 'Status']];
-            const body = filtered.map(o => {
-                const finalSellPrice = o.finalCostPrice + o.profit;
-                return [
-                    new Date(o.createdAt).toLocaleDateString(), 
-                    o.customerName, 
-                    o.itemDescription, 
-                    o.vendorName,
-                    formatCurrency(finalSellPrice), 
-                    formatCurrency(o.finalCostPrice), 
-                    formatCurrency(o.profit), 
-                    o.status
-                ]
-            });
-            
-            doc.autoTable({ startY: 30, head, body, theme: 'striped', headStyles: { fillColor: [79, 70, 229] } });
-            
-            const pdfBlob = doc.output('blob');
-            const file = new File([pdfBlob], `RR_Report_${monthName}_${y}.pdf`, { type: 'application/pdf' });
+        window.saveNewPin = () => {
+            const currentPinInput = document.getElementById('current-pin').value;
+            const newPinInput = document.getElementById('new-pin').value;
+            const savedPin = localStorage.getItem('rr_app_pin') || '0000';
 
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try { await navigator.share({ title: `RR Report ${monthName} ${y}`, files: [file] }); } 
-                catch (e) { console.error(e); }
-            } else {
-                doc.save(`RR_Report_${monthName}_${y}.pdf`);
-            }
-        });
+            if(currentPinInput !== savedPin) {
+                showToast('Current PIN is incorrect.', 'error');
+                return;
+            }
+            if(!/^\d{4}$/.test(newPinInput)) {
+                showToast('New PIN must be exactly 4 digits.', 'error');
+                return;
+            }
 
-        // --- Event Listeners ---
-        orderForm.addEventListener('submit', addOrder);
-        monthSelect.addEventListener('change', calculateMonthlyRecap);
-        yearSelect.addEventListener('change', calculateMonthlyRecap);
-        actionModal.addEventListener('click', (e) => { if (e.target === actionModal) hideActionModal(); });
-        document.getElementById('change-pin-btn').addEventListener('click', showChangePinModal);
+            localStorage.setItem('rr_app_pin', newPinInput);
+            showToast('PIN successfully changed!');
+            hideActionModal();
+        };
+        window.showChangePinModal = showChangePinModal;
 
-        const filterBtn = document.getElementById('filter-btn');
-        const filterDropdown = document.getElementById('filter-dropdown');
-        const currentFilterLabel = document.getElementById('current-filter-label');
+        const showMessageModal = (title, text) => {
+            modalTitle.textContent = title;
+            modalBody.innerHTML = `<p class="text-slate-300 text-center text-sm">${text}</p>`;
+            modalFooter.innerHTML = `<button onclick="hideActionModal()" class="w-full btn-gradient text-white font-semibold py-2.5 rounded-xl">Got it</button>`;
+            actionModal.style.display = 'flex';
+            setTimeout(() => actionModal.classList.add('show'), 10);
+        };
 
-        filterBtn.addEventListener('click', () => { filterDropdown.classList.toggle('hidden'); });
-        window.addEventListener('click', (e) => { if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) filterDropdown.classList.add('hidden'); });
-        
-        filterDropdown.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = e.target.closest('.filter-option');
-            if(target) {
-                currentFilter = target.dataset.filter;
-                currentFilterLabel.textContent = target.textContent;
-                filterDropdown.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active-filter'));
-                target.classList.add('active-filter');
-                renderOrders();
-                filterDropdown.classList.add('hidden');
-            }
-        });
+        // --- PDF Generation ---
+        document.getElementById('export-pdf').addEventListener('click', () => window.print());
+        document.getElementById('share-report').addEventListener('click', async () => {
+            const m = parseInt(monthSelect.value);
+            const y = parseInt(yearSelect.value);
+            const monthName = monthSelect.options[monthSelect.selectedIndex].text;
+            
+            const filtered = allOrders.filter(o => !o.isArchived && new Date(o.createdAt).getMonth() === m && new Date(o.createdAt).getFullYear() === y);
+            
+            if (filtered.length === 0) { showMessageModal('No Data', `No orders found for ${monthName} ${y}.`); return; }
 
-        // --- Init & Lock Screen ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            if(window.feather) feather.replace();
-            const now = new Date();
-            document.getElementById('copyright-year').textContent = now.getFullYear();
-            setupDateSelectors(now.getMonth(), now.getFullYear());
+            const doc = new jsPDF();
+            doc.setFontSize(18); doc.text(`RR Creations - ${monthName} ${y}`, 14, 20);
+            
+            const head = [['Date', 'Customer', 'Item', 'Vendor', 'Final Sale', 'Final Cost', 'Profit', 'Status']];
+            const body = filtered.map(o => {
+                const finalSellPrice = o.finalCostPrice + o.profit;
+                return [
+                    new Date(o.createdAt).toLocaleDateString(), 
+                    o.customerName, 
+                    o.itemDescription, 
+                    o.vendorName,
+                    formatCurrency(finalSellPrice), 
+                    formatCurrency(o.finalCostPrice), 
+                    formatCurrency(o.profit), 
+                    o.status
+                ]
+            });
+            
+            doc.autoTable({ startY: 30, head, body, theme: 'striped', headStyles: { fillColor: [79, 70, 229] } });
+            
+            const pdfBlob = doc.output('blob');
+            const file = new File([pdfBlob], `RR_Report_${monthName}_${y}.pdf`, { type: 'application/pdf' });
 
-            // Lock Screen Logic
-            const lockScreen = document.getElementById('lock-screen');
-            const appContent = document.getElementById('app');
-            const pinDots = document.getElementById('pin-dots').children;
-            let pin = '';
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try { await navigator.share({ title: `RR Report ${monthName} ${y}`, files: [file] }); } 
+                catch (e) { console.error(e); }
+            } else {
+                doc.save(`RR_Report_${monthName}_${y}.pdf`);
+            }
+        });
 
-            const updatePin = () => {
-                for (let i = 0; i < pinDots.length; i++) {
-                    if (i < pin.length) pinDots[i].classList.add('pin-dot-filled');
-                    else pinDots[i].classList.remove('pin-dot-filled');
-                }
-                if (pin.length === 4) {
-                    const actualPin = localStorage.getItem('rr_app_pin') || '0000';
-                    if (pin === actualPin) {
-                        sessionStorage.setItem('rr_unlocked', 'true');
-                        lockScreen.style.opacity = '0';
-                        setTimeout(() => {
-                            lockScreen.style.display = 'none';
-                            appContent.style.display = 'block';
-                            refreshData(); // Load data after unlocking
-                        }, 300);
-                    } else {
-                        document.getElementById('pin-dots').classList.add('shake');
-                        setTimeout(() => {
-                            document.getElementById('pin-dots').classList.remove('shake');
-                            pin = ''; updatePin();
-                        }, 400);
-                    }
-                }
-            };
+        // --- Event Listeners ---
+        orderForm.addEventListener('submit', addOrder);
+        monthSelect.addEventListener('change', calculateMonthlyRecap);
+        yearSelect.addEventListener('change', calculateMonthlyRecap);
+        actionModal.addEventListener('click', (e) => { if (e.target === actionModal) hideActionModal(); });
+        document.getElementById('change-pin-btn').addEventListener('click', showChangePinModal);
 
-            document.getElementById('keypad').addEventListener('click', (e) => {
-                const btn = e.target.closest('button');
-                if(!btn) return;
-                if (btn.id === 'keypad-delete') { pin = pin.slice(0, -1); }
-                else if (pin.length < 4) { pin += btn.textContent.trim(); }
-                updatePin();
-            });
+        const filterBtn = document.getElementById('filter-btn');
+        const filterDropdown = document.getElementById('filter-dropdown');
+        const currentFilterLabel = document.getElementById('current-filter-label');
 
-            if (sessionStorage.getItem('rr_unlocked') === 'true') {
-                lockScreen.style.display = 'none';
-                appContent.style.display = 'block';
-                await refreshData();
-            }
-        });
-    </script>
+        filterBtn.addEventListener('click', () => { filterDropdown.classList.toggle('hidden'); });
+        window.addEventListener('click', (e) => { if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) filterDropdown.classList.add('hidden'); });
+        
+        filterDropdown.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = e.target.closest('.filter-option');
+            if(target) {
+                currentFilter = target.dataset.filter;
+                currentFilterLabel.textContent = target.textContent;
+                filterDropdown.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active-filter'));
+                target.classList.add('active-filter');
+                renderOrders();
+                filterDropdown.classList.add('hidden');
+            }
+        });
+
+        // --- Init & Lock Screen ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(window.feather) feather.replace();
+            const now = new Date();
+            document.getElementById('copyright-year').textContent = now.getFullYear();
+            setupDateSelectors(now.getMonth(), now.getFullYear());
+
+            // Lock Screen Logic
+            const lockScreen = document.getElementById('lock-screen');
+            const appContent = document.getElementById('app');
+            const pinDots = document.getElementById('pin-dots').children;
+            let pin = '';
+
+            const updatePin = () => {
+                for (let i = 0; i < pinDots.length; i++) {
+                    if (i < pin.length) pinDots[i].classList.add('pin-dot-filled');
+                    else pinDots[i].classList.remove('pin-dot-filled');
+                }
+                if (pin.length === 4) {
+                    const actualPin = localStorage.getItem('rr_app_pin') || '0000';
+                    if (pin === actualPin) {
+                        sessionStorage.setItem('rr_unlocked', 'true');
+                        lockScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            lockScreen.style.display = 'none';
+                            appContent.style.display = 'block';
+                            refreshData(); // Load data after unlocking
+                        }, 300);
+                    } else {
+                        document.getElementById('pin-dots').classList.add('shake');
+                        setTimeout(() => {
+                            document.getElementById('pin-dots').classList.remove('shake');
+                            pin = ''; updatePin();
+                        }, 400);
+                    }
+                }
+            };
+
+            document.getElementById('keypad').addEventListener('click', (e) => {
+                const btn = e.target.closest('button');
+                if(!btn) return;
+                if (btn.id === 'keypad-delete') { pin = pin.slice(0, -1); }
+                else if (pin.length < 4) { pin += btn.textContent.trim(); }
+                updatePin();
+            });
+
+            if (sessionStorage.getItem('rr_unlocked') === 'true') {
+                lockScreen.style.display = 'none';
+                appContent.style.display = 'block';
+                await refreshData();
+            }
+        });
+    </script>
 </body>
 </html>
